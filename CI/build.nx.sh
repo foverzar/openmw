@@ -81,7 +81,7 @@ git submodule add https://github.com/foverzar/boost-iostreams.git libs/iostreams
 git rm libs/filesystem
 git submodule add https://github.com/foverzar/boost-filesystem.git libs/filesystem
 
-git submodule update --init filesystem system program_options iostreams # Only init required submodules
+git submodule update --init
 
 cd libs/iostreams
 git checkout boost-1.69.0-nx
