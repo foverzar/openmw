@@ -1,5 +1,8 @@
 #!/bin/bash
 set -xe
+
+apt update && apt install -y build-essential
+
 source $DEVKITPRO/switchvars.sh
 
 OPENMW_SOURCE_DIR=$1
