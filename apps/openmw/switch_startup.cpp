@@ -33,9 +33,9 @@ namespace Switch
     std::string username = "";
 
     // read username from the account with the specified id
-    void readUsername(u128 userId)
+    void readUsername(AccountUid userId)
     {
-        auto rc = accountInitialize();
+        auto rc = accountInitialize(AccountServiceType_Application);
         if (R_FAILED(rc))
             return;
 
@@ -53,9 +53,9 @@ namespace Switch
                 // otherwise throw it out for the time being, since fs seems
                 // allergic to certain UTF-8 characters 
                 bool clean = true;
-                for (size_t i = 0; i < sizeof(pb.username) && pb.username[i]; ++i)
+                for (size_t i = 0; i < sizeof(pb.nickname) && pb.nickname[i]; ++i)
                 {
-                    if (!std::isprint(pb.username[i]))
+                    if (!std::isprint(pb.nickname[i]))
                     {
                         clean = false;
                         break;
@@ -63,7 +63,7 @@ namespace Switch
                 }
 
                 if (clean)
-                    username = std::string(pb.username);
+                    username = std::string(pb.nickname);
             }
 
             accountProfileClose(&profile);
@@ -74,22 +74,23 @@ namespace Switch
 
     // taken from Checkpoint's account.cpp
     // pops up a user selection applet and gets the user id you select
-    u128 selectProfile()
+    AccountUid selectProfile(void)
     {
-        u128 out_id = 0;
+        AccountUid out_id;
         LibAppletArgs args;
         libappletArgsCreate(&args, 0x10000);
         u8 st_in[0xA0]  = {0};
         u8 st_out[0x18] = {0};
         size_t repsz;
-        Result res = libappletLaunch(AppletId_playerSelect, &args, st_in, 0xA0, st_out, 0x18, &repsz);
-        if (R_SUCCEEDED(res))
-        {
-            u64 lres = *(u64*)st_out;
-            u128 uid = *(u128*)&st_out[8];
+
+        Result res = libappletLaunch(AppletId_LibraryAppletPlayerSelect, &args, st_in, 0xA0, st_out, 0x18, &repsz);
+        if (R_SUCCEEDED(res)) {
+            u64 lres       = *(u64*)st_out;
+            AccountUid uid = *(AccountUid*)&st_out[8];
             if (lres == 0)
                 out_id = uid;
         }
+
         return out_id;
     }
 
