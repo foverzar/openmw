@@ -2,6 +2,8 @@
 set -xe
 source $DEVKITPRO/switchvars.sh
 
+OPENMW_SOURCE_DIR=$1
+
 ### Dependencies
 
 ## OpenSceneGraph
@@ -38,7 +40,7 @@ cmake \
 -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS=ON \
 ..
 
-make -j 4 && make install
+make -j `nproc` && make install
 
 cd ../..
 
@@ -61,7 +63,7 @@ cmake \
 -DMYGUI_STATIC=ON \
 ..
 
-make -j 4 && make install
+make -j `nproc` && make install
 
 cd ../..
 
@@ -72,20 +74,20 @@ cd boost
 
 # Replace with patched iostreams
 
-#git config --file=.gitmodules --unset submodule.filesystem
-
+git rm libs/iostreams
+git submodule add https://github.com/foverzar/boost-iostreams.git libs/iostreams
+cd libs/iostreams
+git checkout boost-1.69.0-nx
+cd -
 
 # Replace with patched filesystem
+git rm libs/filesystem
+git submodule add https://github.com/foverzar/boost-filesystem.git libs/filesystem
+cd libs/filesystem
+git checkout boost-1.69.0-nx
+cd -
 
-git config --file=.gitmodules --unset submodule.filesystem
-git rm --cached libs/filesystem
-rm -rf lib/filesystem
-git submodule add https://github.com/foverzar/boost-filesystem.git lib/filesystem
-cd lib/filesystem
-git checkout nx
-cd ../..
-
-git submodule update
+git submodule update --init
 
 ./bootstrap.sh --prefix="$PORTLIBS_PREFIX"
 
@@ -150,3 +152,26 @@ HEREDOC
   --reconfigure install
 
 cd ..
+
+### Build OpenMW
+
+mkdir openmwswitchbuild && cd openmwswitchbuild
+cmake \
+-G"Unix Makefiles" \
+-DSWITCH_LIBNX=ON \
+-DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Switch.cmake" \
+-DCMAKE_BUILD_TYPE=Release \
+-DPKG_CONFIG_EXECUTABLE="$DEVKITPRO/portlibs/switch/bin/aarch64-none-elf-pkg-config" \
+-DCMAKE_INSTALL_PREFIX="$DEVKITPRO/portlibs/switch" \
+-DMyGUI_LIBRARY="$DEVKITPRO/portlibs/switch/lib/libMyGUIEngineStatic.a" \
+-DBUILD_BSATOOL=OFF \
+-DBUILD_NIFTEST=OFF \
+-DBUILD_ESMTOOL=OFF \
+-DBUILD_LAUNCHER=OFF \
+-DBUILD_MWINIIMPORTER=OFF \
+-DBUILD_ESSIMPORTER=OFF \
+-DBUILD_OPENCS=OFF \
+-DBUILD_WIZARD=OFF \
+-DBUILD_MYGUI_PLUGIN=OFF \
+-DOSG_STATIC=TRUE \
+$OPENMW_SOURCE_DIR
