@@ -1,6 +1,7 @@
 #!/bin/bash
 set -xe
 
+dkp-pacman -R
 apt update && apt install -y build-essential
 source $DEVKITPRO/switchvars.sh
 
@@ -167,11 +168,11 @@ make -f Makefile.nx install
 ### Build OpenMW
 
 #-I/opt/devkitpro/portlibs/switch/include/AL -lopenal
-#-DCMAKE_CXX_FLAGS="-fpermissive -include /opt/devkitpro/devkitA64/aarch64-none-elf/include/c++/14.2.0/cstdint -include /opt/devkitpro/devkitA64/aarch64-none-elf/include/c++/14.2.0/limits -L/opt/devkitpro/portlibs/switch/lib -ldav1d" \
 mkdir openmwswitchbuild && cd openmwswitchbuild
 cmake \
 -G"Unix Makefiles" \
 -DSWITCH_LIBNX=ON \
+-DCMAKE_CXX_FLAGS="-fpermissive -include /opt/devkitpro/devkitA64/aarch64-none-elf/include/c++/14.2.0/cstdint -include /opt/devkitpro/devkitA64/aarch64-none-elf/include/c++/14.2.0/limits -L/opt/devkitpro/portlibs/switch/lib -ldav1d" \
 -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Switch.cmake" \
 -DCMAKE_BUILD_TYPE=Release \
 -DPKG_CONFIG_EXECUTABLE="$DEVKITPRO/portlibs/switch/bin/aarch64-none-elf-pkg-config" \
