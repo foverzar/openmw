@@ -2,7 +2,6 @@
 set -xe
 
 apt update && apt install -y build-essential
-
 source $DEVKITPRO/switchvars.sh
 
 OPENMW_SOURCE_DIR=$1
@@ -43,7 +42,8 @@ cmake \
 -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS=ON \
 ..
 
-make -j `nproc` && make install
+make -j `nproc`
+make install
 
 cd ../..
 
@@ -64,9 +64,11 @@ cmake \
 -DMYGUI_BUILD_TOOLS=OFF \
 -DMYGUI_BUILD_PLUGINS=OFF \
 -DMYGUI_STATIC=ON \
+-DCMAKE_CXX_STANDARD=14
 ..
 
-make -j `nproc` && make install
+make -j `nproc`
+make install
 
 cd ../..
 
