@@ -1,7 +1,7 @@
 #!/bin/bash
 set -xe
 
-dkp-pacman -R
+dkp-pacman -R switch-openal-soft
 apt update && apt install -y build-essential
 source $DEVKITPRO/switchvars.sh
 
