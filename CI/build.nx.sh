@@ -157,12 +157,20 @@ HEREDOC
 
 cd ..
 
+## OpenAL
+
+git clone https://github.com/fgsfdsfgs/openal-soft
+make -f Makefile.nx
+make -f Makefile.nx install
+
 ### Build OpenMW
 
+#-I/opt/devkitpro/portlibs/switch/include/AL
 mkdir openmwswitchbuild && cd openmwswitchbuild
 cmake \
 -G"Unix Makefiles" \
 -DSWITCH_LIBNX=ON \
+-DCMAKE_CXX_FLAGS="-fpermissive -include /opt/devkitpro/devkitA64/aarch64-none-elf/include/c++/14.2.0/cstdint -include /opt/devkitpro/devkitA64/aarch64-none-elf/include/c++/14.2.0/limits -L/opt/devkitpro/portlibs/switch/lib -ldav1d -lopenal" \
 -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Switch.cmake" \
 -DCMAKE_BUILD_TYPE=Release \
 -DPKG_CONFIG_EXECUTABLE="$DEVKITPRO/portlibs/switch/bin/aarch64-none-elf-pkg-config" \
