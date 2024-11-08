@@ -72,22 +72,21 @@ cd ../..
 git clone -b boost-1.69.0 https://github.com/boostorg/boost
 cd boost
 
-# Replace with patched iostreams
-
+# Replace with patched iostreams and filesystem
 git rm libs/iostreams
 git submodule add https://github.com/foverzar/boost-iostreams.git libs/iostreams
+git rm libs/filesystem
+git submodule add https://github.com/foverzar/boost-filesystem.git libs/filesystem
+
+git submodule update --init filesystem system program_options iostreams # Only init required submodules
+
 cd libs/iostreams
 git checkout boost-1.69.0-nx
 cd -
 
-# Replace with patched filesystem
-git rm libs/filesystem
-git submodule add https://github.com/foverzar/boost-filesystem.git libs/filesystem
 cd libs/filesystem
 git checkout boost-1.69.0-nx
 cd -
-
-git submodule update --init
 
 ./bootstrap.sh --prefix="$PORTLIBS_PREFIX"
 
