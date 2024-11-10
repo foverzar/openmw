@@ -191,6 +191,7 @@ if (SWITCH_LIBNX)
         ${OSG_PLUGINS}
         ${OPENSCENEGRAPH_LIBRARIES}
         ${OSG_LIB_DIR}/libglad_osg.a
+        dav1d
         EGL
         glapi
         drm_nouveau
