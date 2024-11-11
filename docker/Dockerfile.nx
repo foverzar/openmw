@@ -116,7 +116,7 @@ RUN source $DEVKITPRO/switchvars.sh && \
 
 COPY build.nx.sh /build.sh
 
-RUN mkdir /openmw
+RUN chmod a+x /build.sh && mkdir /openmw
 WORKDIR /openmw
 
 ENTRYPOINT ["/build.sh"]
