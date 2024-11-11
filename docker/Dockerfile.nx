@@ -1,5 +1,7 @@
 FROM devkitpro/devkita64:20241023
 
+SHELL ["/bin/bash", "-c"]
+
 RUN dkp-pacman --noconfirm -R switch-openal-soft && \
     apt update && \
     apt install -y build-essential && \
