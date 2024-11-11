@@ -5,6 +5,7 @@ set -xe
 mkdir -p build
 cd build
 
+source $DEVKITPRO/switchvars.sh
 # Running CMake..
 cmake \
     -G"Unix Makefiles" \
