@@ -267,7 +267,7 @@ if (SWITCH_LIBNX)
     add_custom_command(
         TARGET openmw POST_BUILD
         COMMAND
-            aarch64-none-elf-strip -o ${CMAKE_BINARY_DIR}/openmw_stripped ${CMAKE_BINARY_DIR}/openmw
+            aarch64-none-elf-strip -o ${CMAKE_BINARY_DIR}/openmw_stripped ${CMAKE_BINARY_DIR}/openmw.elf
         COMMAND
             elf2nro ${CMAKE_BINARY_DIR}/openmw_stripped ${CMAKE_BINARY_DIR}/openmw.nro
             --icon=${CMAKE_SOURCE_DIR}/files/switch/openmw.jpg
